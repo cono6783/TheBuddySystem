@@ -4,10 +4,7 @@ import com.mojang.logging.LogUtils;
 import cono6783.thebuddysystem.entity.Buddy;
 import cono6783.thebuddysystem.entity.pathfinding.Path;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.LinkedList;
 

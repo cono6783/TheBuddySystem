@@ -1,7 +1,6 @@
 package cono6783.thebuddysystem.entity.pathfinding;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 
 public class Node {
     public Node parent;
