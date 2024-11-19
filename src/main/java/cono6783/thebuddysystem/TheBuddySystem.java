@@ -5,6 +5,7 @@ import com.mojang.logging.LogUtils;
 import cono6783.thebuddysystem.entity.Buddy;
 import cono6783.thebuddysystem.entity.BuddyRenderer;
 import cono6783.thebuddysystem.registry.ModEntities;
+import cono6783.thebuddysystem.registry.ModItems;
 import cono6783.thebuddysystem.util.EntityFinder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -40,6 +41,7 @@ public class TheBuddySystem {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModEntities.ENTITY_DEFERRED_REGISTER.register(modEventBus);
+        ModItems.ITEM_DEFERRED_REGISTER.register(modEventBus);
 
 
         LOGGER.info("Does this WORKY WORKY TIME");

@@ -46,7 +46,7 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
     //Variables
     private boolean wantsToMove;
     private final SimpleContainer inventory = new SimpleContainer(8);
-    private BlockPos posGoal = new BlockPos(-46, 86, -44);
+    private static BlockPos posGoal = new BlockPos(-46, 86, -44); //Just made this static for the testings
     public Block blockTarget;
 
     private double buddyEnergy;
@@ -205,12 +205,13 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
         return wantsToMove;
     }
 
-    public BlockPos getPosGoal() {
+    public static BlockPos getPosGoal() {
         return posGoal;
     }
 
-    public void setPosGoal(BlockPos newPosition) {
-        this.posGoal = newPosition;
+    public static void setPosGoal(BlockPos newPosition) {
+        posGoal = newPosition;
+        LOGGER.info("Pos goal set to {}", posGoal);
     }
 
     public BlockState getBlockInFront() {

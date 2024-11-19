@@ -13,5 +13,5 @@ public class ModItems {
 
     public static final DeferredRegister<Item> ITEM_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 
-    public static final RegistryObject<Item> BUDDY_SPAWNER = ITEM_DEFERRED_REGISTER.register("Buddy Spawner", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> BUDDY_MOVE_STICK = ITEM_DEFERRED_REGISTER.register("buddymovestick", () -> new Item(new Item.Properties()));
 }
