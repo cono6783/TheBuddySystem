@@ -1,0 +1,32 @@
+Finish Pathfinding (A*) - Done
+Make more dynamic Pathfinding
+    Jump over blocks
+    Place blocks to get over walls
+    Don't pathfind into corners - In Progress
+    Build a bridge
+Incorporate breaking blocks into pathfinding
+    Hivemind can set areas such as
+        Mining, woodcutting
+        Protected areas for buildings and such
+Variable speeds
+    Maybe do 4 speeds
+        Sprint
+        Run
+        Walk - default
+        Slow Walk - low power mode
+Buddy Vision (TM) - buddy's can see what all the other buddys oin their team can.
+    They will request a block that they are looking for and if that block is in another buddy's range of vision the loooking buddy will be sent where that block is located
+Low / Auxilary Power mode - speed gets turned down and the buddy pathfinds to (or places) a charger
+    The buddy also sends out a distress message to others on its team that it needs energy
+Accessories
+    Battery backpack - charges other buddys in an area around it
+
+Mastery - as buddys do a task more they get better at it (various bonuses)
+    Woodcutting, Fishing, Mining, Smithing/Upgrading, Combat, Ranged Combat
+    Their skin changes based off of their current highest mastery (maybe top two)
+    If the buddy maxes out a mastery they are locked out of the higher levels of other masterys
+
+Upgrades
+    Faster (more efficient) running
+    Larger Battery
+    Faster mining / attack speed
