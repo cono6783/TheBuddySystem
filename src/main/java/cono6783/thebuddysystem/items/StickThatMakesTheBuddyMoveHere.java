@@ -16,7 +16,7 @@ public class StickThatMakesTheBuddyMoveHere extends Item {
         super(properties);
     }
 
-
+    /* This is no work
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) { // not sure why this isnt working
         LogUtils.getLogger().info("Outside");
@@ -27,7 +27,7 @@ public class StickThatMakesTheBuddyMoveHere extends Item {
 
 
         return InteractionResultHolder.success(player.getItemInHand(interactionHand));
-    }
+    } */
 
 
 

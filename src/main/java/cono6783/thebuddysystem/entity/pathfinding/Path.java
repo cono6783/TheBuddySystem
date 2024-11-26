@@ -32,6 +32,10 @@ public class Path {
         return openList;
     }
 
+    public ArrayList<Node> getClosedList() {
+        return closedList;
+    }
+
     public Node getLowestFCost() {
         Node lowest = openList.get(0);
         for (Node node : openList) {

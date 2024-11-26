@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import cono6783.thebuddysystem.entity.goals.HarvestGoal;
 import cono6783.thebuddysystem.entity.goals.MoveTo;
 import cono6783.thebuddysystem.entity.pathfinding.BuddyNavigation;
+import cono6783.thebuddysystem.util.BuddyBlockFinder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.ItemTags;
@@ -46,7 +47,7 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
     //Variables
     private boolean wantsToMove;
     private final SimpleContainer inventory = new SimpleContainer(8);
-    private static BlockPos posGoal = new BlockPos(-46, 86, -44); //Just made this static for the testings
+    private BlockPos posGoal; // Used to be a default pos here; BlockPos(-46, 86, -44);
     public Block blockTarget;
 
     private double buddyEnergy;
@@ -69,6 +70,18 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
         if (getHealth() < 5.0) {
             setWantsToMove(true);
         }
+        if (posGoal == null) {
+            try {
+                posGoal = BuddyBlockFinder.findBlockAroundBuddy(this, Blocks.GOLD_BLOCK, this.level(), 10).offset(0, 1, 0);
+            } catch (Exception e) {
+                posGoal = null;
+            }
+
+        }
+
+
+
+
         //LOGGER.info("Buddy's energy is: {}", buddyEnergy);
         /*
         BlockPos blockToRemove = new BlockPos((int) Math.floor(position().x), (int) Math.floor(position().y), (int) Math.floor(position().z)).below();
@@ -205,11 +218,11 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
         return wantsToMove;
     }
 
-    public static BlockPos getPosGoal() {
+    public BlockPos getPosGoal() {
         return posGoal;
     }
 
-    public static void setPosGoal(BlockPos newPosition) {
+    public void setPosGoal(BlockPos newPosition) {
         posGoal = newPosition;
         LOGGER.info("Pos goal set to {}", posGoal);
     }

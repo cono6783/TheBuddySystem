@@ -41,7 +41,7 @@ public class BuddyNavigation {
 
 
             if (path.isOpenEmpty()) {
-                LogUtils.getLogger().info("Failed To Find Path");
+                LogUtils.getLogger().info("Failed To Find Path; Closed List was {} long", path.getClosedList().size());
                 return null;
             }
         }

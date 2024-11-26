@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class BuddyBlockFinder {
 
-    public static BlockPos findBlockAroundPos(Buddy buddy, Block blockToFind, Level level, int radius) {
+    public static BlockPos findBlocksAroundPos(Buddy buddy, Block blockToFind, Level level, int radius) {
         ArrayList<BlockPos> foundBlocks = new ArrayList<>();
 
         int searchStartX = buddy.blockPosition().getX() - radius;
@@ -30,22 +30,46 @@ public class BuddyBlockFinder {
             }
         }
 
-        int shortestPath = 0;
+        int shortestPath = Integer.MAX_VALUE;
+        BlockPos shortestBlockPos = null;
         for (BlockPos blockPos : foundBlocks) {
 
 
-            shortestPath = Math.min(shortestPath, LocationFindUtil.getDistance(blockPos, buddy.blockPosition()));
 
+            int currentDist = LocationFindUtil.getDistance(blockPos, buddy.blockPosition());
+            if (shortestPath > currentDist) {
+                shortestPath = currentDist;
+                shortestBlockPos = blockPos;
+            }
 
 
         }
 
 
+        return shortestBlockPos;
+
+
+
+
+    }
+
+    public static BlockPos findBlockAroundBuddy(Buddy buddy, Block blockToFind, Level level, int radius) {
+        int searchStartX = buddy.blockPosition().getX() - radius;
+        int searchStartY = buddy.blockPosition().getY() - radius;
+        int searchStartZ = buddy.blockPosition().getZ() - radius;
+
+        for (int x = 0; x < radius*2 + 1; x++) {
+            for (int y = 0; y < radius*2 + 1; y++) {
+                for (int z = 0; z < radius*2 + 1; z++) {
+                    BlockPos currentBlockPos = new BlockPos(searchStartX + x, searchStartY + y, searchStartZ + z);
+                    if (level.getBlockState(currentBlockPos).is(blockToFind)) {
+                        return currentBlockPos;
+                    }
+
+                }
+            }
+        }
         return null;
-
-
-
-
     }
 
 

@@ -2,9 +2,11 @@ package cono6783.thebuddysystem.entity.goals;
 
 import com.mojang.logging.LogUtils;
 import cono6783.thebuddysystem.entity.Buddy;
+import cono6783.thebuddysystem.entity.pathfinding.Node;
 import cono6783.thebuddysystem.entity.pathfinding.Path;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.block.Block;
 
 import java.util.LinkedList;
 
@@ -58,20 +60,32 @@ public class MoveTo extends Goal {
         if (currentMoveGoal == null || currentMoveGoal.equals(buddy.blockPosition())) {
             currentMoveGoal = route.removeFirst();
         }
+        if (!buddy.blockPosition().equals(buddy.getPosGoal())) {
+            LogUtils.getLogger().info("the route is currently {}", route);
+            buddy.getMoveControl().setWantedPosition(currentMoveGoal.getX() + 0.5, currentMoveGoal.getY(), currentMoveGoal.getZ() + 0.5, speed);
+            lastKnownPosGoal = buddy.getPosGoal();
+        } else {
+            buddy.setPosGoal(null);
+            route.clear();
+        }
 
-        LogUtils.getLogger().info("the route is currently {}", route);
-        buddy.getMoveControl().setWantedPosition(currentMoveGoal.getX() + 0.5, currentMoveGoal.getY(), currentMoveGoal.getZ() + 0.5, speed);
-        lastKnownPosGoal = buddy.getPosGoal();
+
     }
 
     @Override
     public boolean canContinueToUse() {
-        return !route.isEmpty();
+        return route == null || !route.isEmpty();
     }
 
     private void computePathAndNodeList() {
         this.path = buddy.getBuddyNavigation().computePath(buddy.blockPosition(), buddy.getPosGoal());
-        this.route = path.getNodeListToFollow();
+        if (path == null) {
+            this.route = new LinkedList<>();
+            this.route.add(buddy.blockPosition());
+        } else {
+            this.route = path.getNodeListToFollow();
+        }
+
     }
 
 

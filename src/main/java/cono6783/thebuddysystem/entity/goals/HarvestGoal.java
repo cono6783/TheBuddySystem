@@ -27,7 +27,7 @@ public class HarvestGoal extends Goal {
 
 
     public void tick() {
-        BlockPos blockPosFound = BuddyBlockFinder.findBlockAroundPos(buddy, buddy.blockTarget, buddy.level(), 10);
+        BlockPos blockPosFound = BuddyBlockFinder.findBlockAroundBuddy(buddy, buddy.blockTarget, buddy.level(), 10);
         if (blockPosFound != null) {
             LogUtils.getLogger().info(blockPosFound.toString());
             buddy.setPosGoal(blockPosFound);
