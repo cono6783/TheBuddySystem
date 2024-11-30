@@ -18,7 +18,7 @@ public class Path {
 
 
     public Path(BlockPos start, BlockPos target, Level level) {
-        openList.add(new Node(start));
+        openList.add(new Node(start, false));
         this.target = target;
         this.level = level;
     }
@@ -91,11 +91,11 @@ public class Path {
         return null;
     }
 
-    public LinkedList<BlockPos> getNodeListToFollow() {
-        LinkedList<BlockPos> posList = new LinkedList<>();
+    public LinkedList<Node> getNodeListToFollow() {
+        LinkedList<Node> posList = new LinkedList<>();
         Node currentNode = closedList.get(closedList.size() - 1);
         while (currentNode.parent != null) {
-            posList.addFirst(currentNode.getPos());
+            posList.addFirst(currentNode);
             currentNode = currentNode.parent;
         }
         return posList;

@@ -40,6 +40,8 @@ public class BuddyNavigation {
 
 
 
+
+
             if (path.isOpenEmpty()) {
                 LogUtils.getLogger().info("Failed To Find Path; Closed List was {} long", path.getClosedList().size());
                 return null;
@@ -72,29 +74,77 @@ public class BuddyNavigation {
         return new BlockPos[] {blockPos.offset(-1, 0, 1), blockPos.offset(1, 0, 1), blockPos.offset(-1, 0, -1), blockPos.offset(1, 0 ,-1)};
     }
 
+    private BlockPos[] getBlocksAbove(BlockPos[] blocksBelow) {
+        BlockPos[] aboveBlocks = new BlockPos[blocksBelow.length];
+        for (int i = 0; i < blocksBelow.length; i++) {
+            aboveBlocks[i] = blocksBelow[i].offset(0, 1, 0);
+        }
+        return aboveBlocks;
+    }
+
     private void individualBlockLoop(BlockPos[] listOfNeighbors, BlockPos target, int heuristicOffset) {
         for (BlockPos neighbor : listOfNeighbors) {
-            Node neighborNode = new Node(neighbor);
-            neighborNode.setParent(current); // This needs to be up here so that i can calculate if the buddy can cut corners
-            neighborNode.calculateHeuristic(heuristicOffset);
-            //GCost used to be here
-            if (path.hasClosedNodeByPos(neighborNode.getPos())) {
-                continue;
-            }
-            //Check if the node is traversable or not
-            if (!isBlockOpen(neighbor) || !isBlockOpen(neighbor.above()) || isBlockOpen(neighbor.below())) { // need to make this logic more
-                continue;
-            }
-            if (!path.hasOpenNodeByPos(neighborNode.getPos()) || neighborNode.h < path.getNodeByPos(neighbor).h) {
-                neighborNode.calculateGCost(target); // More efficient down here (slightly)
-                neighborNode.calculateFCost();
-
-                if (!path.hasOpenNodeByPos(neighborNode.getPos())) {
-                    path.addToOpenList(neighborNode);
-                }
-            }
+            checkIndividualBlock(neighbor, target, heuristicOffset, false, false);
         }
 
+    }
+
+    private void checkIndividualBlock(BlockPos nodeChecking, BlockPos target, int heuristicOffset, boolean isJumping, boolean isFalling) {
+        Node neighborNode = new Node(nodeChecking, isJumping);
+        neighborNode.setParent(current); // This needs to be up here so that I can calculate if the buddy can cut corners
+
+
+        if (isJumping) {
+            heuristicOffset += 5;
+        }
+        neighborNode.calculateHeuristic(heuristicOffset);
+        //GCost used to be here
+        if (path.hasClosedNodeByPos(neighborNode.getPos())) {
+            return;
+        }
+
+        // This starts different types of movement checks
+
+        //Check if the buddy can fall down safely
+        if (!isFalling && isBlockOpen(nodeChecking.below())) { // He keeps jumping here for some reasoon
+            int blocksBelow = 1;
+            while (isBlockOpen(nodeChecking.below(blocksBelow))) {
+                blocksBelow++;
+            }
+            if (blocksBelow <= 3) { // Will add more checks here based off the buddy's health and fall damage resist
+                checkIndividualBlock(nodeChecking.below(blocksBelow), target, heuristicOffset, false, true);
+            }
+            return;
+        }
+
+        // Check if buddy should jump on top of this block
+        if (!isBlockOpen(nodeChecking) && isBlockOpen(nodeChecking.above())) { // If block is solid AND block above is open AND is this not already a jump node <-- may not be needed but just to be safe
+            checkIndividualBlock(nodeChecking.offset(0, 1, 0), target, heuristicOffset, true, false);
+            return;
+        }
+
+        //Check if the node is traversable or not
+        if (!isBlockOpen(nodeChecking) || !isBlockOpen(nodeChecking.above())) {
+            return;
+        }
+
+
+
+
+
+
+
+
+
+
+        if (!path.hasOpenNodeByPos(neighborNode.getPos()) || neighborNode.h < path.getNodeByPos(nodeChecking).h) {
+            neighborNode.calculateGCost(target); // More efficient down here (slightly)
+            neighborNode.calculateFCost();
+
+            if (!path.hasOpenNodeByPos(neighborNode.getPos())) {
+                path.addToOpenList(neighborNode);
+            }
+        }
     }
 
     private boolean isBlockOpen(BlockPos blockPos) {

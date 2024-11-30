@@ -15,7 +15,7 @@ public class MoveTo extends Goal {
     private final Buddy buddy;
     private final double speed;
     private Path path;
-    private LinkedList<BlockPos> route;
+    private LinkedList<Node> route;
     private BlockPos lastKnownPosGoal;
 
     public MoveTo(Buddy buddy, double speed) {
@@ -40,7 +40,7 @@ public class MoveTo extends Goal {
         computePathAndNodeList();
 
     }
-    BlockPos currentMoveGoal;
+    Node currentMoveGoal;
     @Override
     public void tick() {
         /* This will be implemented in the BuddyNavigation
@@ -50,19 +50,24 @@ public class MoveTo extends Goal {
         } */
 
         if (!lastKnownPosGoal.equals(buddy.getPosGoal())) {
-            LogUtils.getLogger().info("Recomputed from the tick");
+            LogUtils.getLogger().info("posGoal changed. Recomputing path...");
             computePathAndNodeList();
         }
 
+        if (route == null) {
+            return;
+        }
 
 
-
-        if (currentMoveGoal == null || currentMoveGoal.equals(buddy.blockPosition())) {
+        if (currentMoveGoal == null || currentMoveGoal.isSamePos(buddy.blockPosition())) {
             currentMoveGoal = route.removeFirst();
         }
         if (!buddy.blockPosition().equals(buddy.getPosGoal())) {
             LogUtils.getLogger().info("the route is currently {}", route);
-            buddy.getMoveControl().setWantedPosition(currentMoveGoal.getX() + 0.5, currentMoveGoal.getY(), currentMoveGoal.getZ() + 0.5, speed);
+            buddy.getMoveControl().setWantedPosition(currentMoveGoal.getPos().getX() + 0.5, currentMoveGoal.getPos().getY(), currentMoveGoal.getPos().getZ() + 0.5, speed);
+            if (currentMoveGoal.isJumpNode()) {
+                buddy.jump();
+            }
             lastKnownPosGoal = buddy.getPosGoal();
         } else {
             buddy.setPosGoal(null);
@@ -79,12 +84,8 @@ public class MoveTo extends Goal {
 
     private void computePathAndNodeList() {
         this.path = buddy.getBuddyNavigation().computePath(buddy.blockPosition(), buddy.getPosGoal());
-        if (path == null) {
-            this.route = new LinkedList<>();
-            this.route.add(buddy.blockPosition());
-        } else {
-            this.route = path.getNodeListToFollow();
-        }
+        this.route = path == null ? null : path.getNodeListToFollow();
+
 
     }
 
