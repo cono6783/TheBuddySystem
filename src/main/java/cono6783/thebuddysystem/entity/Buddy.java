@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import cono6783.thebuddysystem.entity.goals.HarvestGoal;
 import cono6783.thebuddysystem.entity.goals.MoveTo;
 import cono6783.thebuddysystem.entity.pathfinding.BuddyNavigation;
+import cono6783.thebuddysystem.hivemind.Hivemind;
 import cono6783.thebuddysystem.util.BuddyBlockFinder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -37,7 +38,7 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
     public static final Logger LOGGER = LogUtils.getLogger();
     private BuddyNavigation buddyNavigation;
 
-
+    private Hivemind hivemind;
 
     //Values and Multipliers for movement
     private double JUMP_ENERGY = 0.3;
