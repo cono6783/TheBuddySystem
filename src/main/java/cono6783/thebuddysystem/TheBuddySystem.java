@@ -4,10 +4,13 @@ package cono6783.thebuddysystem;
 import com.mojang.logging.LogUtils;
 import cono6783.thebuddysystem.entity.Buddy;
 import cono6783.thebuddysystem.entity.BuddyRenderer;
+import cono6783.thebuddysystem.menus.BuddyScreen;
 import cono6783.thebuddysystem.registry.ModEntities;
 import cono6783.thebuddysystem.registry.ModItems;
+import cono6783.thebuddysystem.registry.ModMenus;
 import cono6783.thebuddysystem.util.EntityFinder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,9 +45,9 @@ public class TheBuddySystem {
 
         ModEntities.ENTITY_DEFERRED_REGISTER.register(modEventBus);
         ModItems.ITEM_DEFERRED_REGISTER.register(modEventBus);
+        ModMenus.MENU_DEFERRED_REGISTER.register(modEventBus);
 
 
-        LOGGER.info("Does this WORKY WORKY TIME");
 
         modEventBus.addListener(this::commonSetup);
 
@@ -85,6 +88,10 @@ public class TheBuddySystem {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             EntityRenderers.register(ModEntities.Buddy.get(), BuddyRenderer::new);
+
+            event.enqueueWork(
+                    () -> MenuScreens.register(ModMenus.BUDDY_MENU.get(), BuddyScreen::new)
+            );
         }
     }
 

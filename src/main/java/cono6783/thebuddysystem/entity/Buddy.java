@@ -5,6 +5,7 @@ import cono6783.thebuddysystem.entity.goals.HarvestGoal;
 import cono6783.thebuddysystem.entity.goals.MoveTo;
 import cono6783.thebuddysystem.entity.pathfinding.BuddyNavigation;
 import cono6783.thebuddysystem.hivemind.Hivemind;
+import cono6783.thebuddysystem.menus.BuddyMenu;
 import cono6783.thebuddysystem.util.BuddyBlockFinder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -13,6 +14,7 @@ import net.minecraft.util.VisibleForDebug;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,7 +22,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
@@ -92,6 +93,10 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
     }
 
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+
+        openBuddyMenu(player, this.getDisplayName());
+
+        /* Old interact
         ItemStack itemInHand = player.getItemInHand(interactionHand);
         LOGGER.info(getInventory().toString());
         if (player.isCrouching() && itemInHand.isEmpty()) {
@@ -102,7 +107,7 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
         if (attemptEquipItem(itemInHand)) {
             player.setItemInHand(interactionHand, ItemStack.EMPTY);
 
-        }
+        } */
 //        LOGGER.info("Buddy's current position is {}", this.position());
 //        LOGGER.info("He is trying to move to {}", this.position().add(0, 1, 0));
 //        this.getMoveControl().setWantedPosition(this.position().x + 1, this.position().y, this.position().z, 1.0);
@@ -193,6 +198,19 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
 
 
 
+    //Menu Stuff
+
+    public void openBuddyMenu(Player player, Component title) {
+        player.openMenu(new SimpleMenuProvider((containerID, menuInv, playerObject) -> {
+            return new BuddyMenu(containerID, menuInv, this.inventory);
+        }, title));
+    }
+
+
+
+
+
+
 
     //Inventory
     @VisibleForDebug
@@ -266,9 +284,6 @@ public class Buddy extends PathfinderMob implements InventoryCarrier {
         this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(2, new HarvestGoal(this, 1.0D));
     }
-
-
-
 
 
 
