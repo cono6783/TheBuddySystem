@@ -1,13 +1,19 @@
 package cono6783.thebuddysystem.menus;
 
+import cono6783.thebuddysystem.TheBuddySystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class BuddyScreen extends AbstractContainerScreen<BuddyMenu> {
+    private static final ResourceLocation CONTAINER_LOCATION = new ResourceLocation(TheBuddySystem.MODID, "textures/gui/container");
+
+
     public BuddyScreen(BuddyMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
+        //Define a new width and height here if needed
 
     }
 
